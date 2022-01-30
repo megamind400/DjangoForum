@@ -7,10 +7,14 @@
 </h4>
 
 <div>
-    <a href="{% url 'create-room' %}"> submit something </a>
+    <a href="{% url 'create-room'%}"> submit something </a>
+    <hr>
     <div>
         {% for room in rooms %}
+        
         <div>
+
+            <a href="{% url 'update-room' room.id %}"> Edit </a>
             <h5>
                 <span>@ {{room.host}} </span>:
                 {{room.id}}. <a href='{% url "room" room.id%}'> {{room.name}} </a>

@@ -3,6 +3,7 @@ import re
 from django import http
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template import context
 
 from .forms import RoomForm
 from .models import Room
@@ -30,4 +31,17 @@ def CreateRoom(request):
             return redirect('homepage')
     context = {'form': form}
     print("im here")
+    return render(request, 'base/room_form.html', context)
+
+
+def updateRoom(request, pk):
+    room = Room.objects.get(id=pk)
+    form = RoomForm(instance=room)
+
+    if request.method == 'POST':
+        form = RoomForm(request.POST, instance=room)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage')
+    context = {'form': form}
     return render(request, 'base/room_form.html', context)
