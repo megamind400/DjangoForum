@@ -39,6 +39,11 @@
         <a href="{% url 'create-room'%}"> submit something </a>
         <hr>
         <div>
+            <p>{% if room_count == 1 %} 1 room found:
+            {% elif room_count > 1 %} {{ room_count}} rooms found:
+            {% elif room_count == 0 %} no room has been found!!
+            {% endif %}
+            </p>
             {% for room in rooms %}
 
             <div>

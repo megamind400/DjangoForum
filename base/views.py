@@ -1,6 +1,7 @@
 from http.client import REQUEST_HEADER_FIELDS_TOO_LARGE
 import re
 from django import http
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import context
@@ -14,9 +15,15 @@ def home(request):
 
     q = request.GET.get('search') if request.GET.get('search') != None else ''
     #print(q)
-    roomsvar = Room.objects.filter(topic__name__icontains=q)
+    roomsvar = Room.objects.filter(
+        Q(topic__name__icontains=q) |
+        Q(name__icontains=q) |
+        Q(description__icontains=q)
+        )
+    
     topic = Topic.objects.all()
-    context = {'rooms': roomsvar, 'topic': topic}
+    roomcount = roomsvar.count()
+    context = {'rooms': roomsvar, 'topic': topic, 'room_count': roomcount}
     return render(request, 'base/home.html', context)   
 
 def room(request, pk):
