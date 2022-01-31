@@ -5,14 +5,11 @@
 <style>
     .home-container{
         display: grid;
-        grid-template-columns: 2fr 10fr;
+        grid-template-columns: 2fr 12fr;
     }
 
 </style>
 
-<h4>
-    Home Page
-</h4>
 <div class="home-container">
 
     <div>
@@ -35,13 +32,14 @@
 
     </div>
     <div>
-        
+        <br>
         <a href="{% url 'create-room'%}"> submit something </a>
         <hr>
         <div>
-            <p>{% if room_count == 1 %} 1 room found:
-            {% elif room_count > 1 %} {{ room_count}} rooms found:
-            {% elif room_count == 0 %} no room has been found!!
+            <p>
+            {% if room_count == 1 %} 1 room available:
+            {% elif room_count > 1 %} {{ room_count}} rooms available:
+            {% elif room_count == 0 %} no room has been found with the given information!
             {% endif %}
             </p>
             {% for room in rooms %}

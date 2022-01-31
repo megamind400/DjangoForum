@@ -5,6 +5,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import context
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 from .forms import RoomForm
 from .models import Room,Topic
@@ -64,3 +66,16 @@ def deleteRoom(request, pk):
         room.delete()
         return redirect('homepage')
     return render(request, 'base/delete.html',{'obj':room})
+
+def loginreg(request):
+    if request.method == 'POST':
+        usernamevar = request.POST.get('username')
+        passwordvar = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=usernamevar)
+    
+        except:
+            messages.error(request, 'wrong Username or Password') 
+    context = {}
+    return render(request, 'base/LoginReg.html', context)
