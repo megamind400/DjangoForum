@@ -27,7 +27,7 @@
     {% for eachtopic in topic %}
        
             <h5>
-            <a href="{% url 'homepage' %}?q={{eachtopic.name}}"> {{ eachtopic }} </a>
+            <a href="{% url 'homepage' %}?search={{eachtopic.name}}"> {{ eachtopic }} </a>
             </h5>
         
     {% endfor %}
