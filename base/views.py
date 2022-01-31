@@ -6,13 +6,17 @@ from django.shortcuts import render, redirect
 from django.template import context
 
 from .forms import RoomForm
-from .models import Room
+from .models import Room,Topic
 
 
 
 def home(request):
-    roomsvar = Room.objects.all()    
-    context = {'rooms': roomsvar}
+
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    #print(q)
+    roomsvar = Room.objects.filter(topic__name__icontains=q)
+    topic = Topic.objects.all()
+    context = {'rooms': roomsvar, 'topic': topic}
     return render(request, 'base/home.html', context)   
 
 def room(request, pk):

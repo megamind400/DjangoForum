@@ -2,30 +2,59 @@
 <!--  -->
 {% block content %}
 
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 2fr 10fr;
+    }
+
+</style>
+
 <h4>
     Home Page
 </h4>
+<div class="home-container">
 
-<div>
-    <a href="{% url 'create-room'%}"> submit something </a>
-    <hr>
     <div>
-        {% for room in rooms %}
-        
-        <div>
-
-            <a href="{% url 'update-room' room.id %}"> Edit </a>
-            <a href="{% url 'delete-room' room.id %}"> Delete </a>
+    <h3>
+    Browse Topics
+    </h3>
+    <hr>
+    <h5>
+    <a href="{% url 'homepage' %}">All</a>
+    </h5>
+    
+    {% for eachtopic in topic %}
+       
             <h5>
-                <span>@{{room.host}} </span>:
-                {{room.id}}. <a href='{% url "room" room.id%}'> {{room.name}} </a>
-                <small> {{room.topic.name}}</small>
-                <hr>
+            <a href="{% url 'homepage' %}?q={{eachtopic.name}}"> {{ eachtopic }} </a>
             </h5>
-        </div>
-        {% endfor %}
+        
+    {% endfor %}
+  
+
     </div>
+    <div>
+        
+        <a href="{% url 'create-room'%}"> submit something </a>
+        <hr>
+        <div>
+            {% for room in rooms %}
 
+            <div>
+
+                <a href="{% url 'update-room' room.id %}"> Edit </a>
+                <a href="{% url 'delete-room' room.id %}"> Delete </a>
+                <h5>
+                    <span>@{{room.host}} </span>:
+                    {{room.id}}. <a href='{% url "room" room.id%}'> {{room.name}} </a>
+                    <small> {{room.topic.name}}</small>
+                    <hr>
+                </h5>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
 </div>
-
 {% endblock %}

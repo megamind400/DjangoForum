@@ -4,7 +4,7 @@ from statistics import mode
 from django.db import models
 from django.contrib.auth.models import User
 from sqlalchemy import null
-# from telegram import user     #wtf is this??
+
 
 # Create your models here.
 
