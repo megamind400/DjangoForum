@@ -7,6 +7,8 @@ from django.shortcuts import render, redirect
 from django.template import context
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.test import RequestFactory
 
 from .forms import RoomForm
 from .models import Room,Topic
@@ -67,6 +69,11 @@ def deleteRoom(request, pk):
         return redirect('homepage')
     return render(request, 'base/delete.html',{'obj':room})
 
+
+def logoutuser(request):
+    logout(request)
+    return redirect('homepage')
+
 def loginreg(request):
     if request.method == 'POST':
         usernamevar = request.POST.get('username')
@@ -77,6 +84,11 @@ def loginreg(request):
 
         except:
             messages.error(request, 'wrong Username or Password') 
-            print(messages)
+
+        user = authenticate(request, username=usernamevar, password=passwordvar)
+        if user is not None:
+            login(request, user)
+            return redirect('homepage')
+
     context = {}
     return render(request, 'base/LoginReg.html', context)
