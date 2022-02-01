@@ -15,4 +15,11 @@
     
     
 </h3>
+
+<h6>
+                {% if request.user == room.host %}
+                <h6><a href="{% url 'update-room' room.id %}"> Edit </a>
+                <a href="{% url 'delete-room' room.id %}"> Delete </a></h6>
+                {% endif %}
+</h6>
 {% endblock %}

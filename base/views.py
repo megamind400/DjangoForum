@@ -84,6 +84,9 @@ def logoutuser(request):
     return redirect('homepage')
 
 def loginreg(request):
+
+    if request.user.is_authenticated:
+        return redirect('homepage')
     if request.method == 'POST':
         usernamevar = request.POST.get('username')
         passwordvar = request.POST.get('password')
