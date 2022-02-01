@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.test import RequestFactory
+from django.contrib.auth.decorators import login_required
 
 from .forms import RoomForm
 from .models import Room,Topic
@@ -36,7 +37,7 @@ def room(request, pk):
     context = {'room': room}
     return render(request, 'base/room.html',context )    
 
-
+@login_required(login_url='loginreg')
 def CreateRoom(request):
     form = RoomForm
     if request.method == 'POST':
@@ -48,10 +49,14 @@ def CreateRoom(request):
     print("im here")
     return render(request, 'base/room_form.html', context)
 
-
+@login_required(login_url='loginreg')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+
+    if request.user != room.host:
+        messages.error(request, 'you dont have the required permissions to edit this room')
+        return redirect('homepage')
 
     if request.method == 'POST':
         form = RoomForm(request.POST, instance=room)
@@ -61,9 +66,13 @@ def updateRoom(request, pk):
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
 
-
+@login_required(login_url='loginreg')
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
+
+    if request.user != room.host:
+        messages.error(request, 'you dont have the required permissions to delete this room')
+        return redirect('homepage')
     if request.method == 'POST':
         room.delete()
         return redirect('homepage')
