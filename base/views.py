@@ -71,11 +71,12 @@ def loginreg(request):
     if request.method == 'POST':
         usernamevar = request.POST.get('username')
         passwordvar = request.POST.get('password')
-
+        print("username:", usernamevar)
         try:
             user = User.objects.get(username=usernamevar)
-    
+
         except:
             messages.error(request, 'wrong Username or Password') 
+            print(messages)
     context = {}
     return render(request, 'base/LoginReg.html', context)
