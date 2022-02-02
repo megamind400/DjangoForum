@@ -7,19 +7,43 @@
 
 </head>
 <h3>
-    
-    <h2>{{room.name}} </h2>
-    <hr>
-    <h3> {{ room.description}} </h3>
-
-    
-    
-</h3>
-
-<h6>
+    <h6>
                 {% if request.user == room.host %}
                 <h6><a href="{% url 'update-room' room.id %}"> Edit </a>
                 <a href="{% url 'delete-room' room.id %}"> Delete </a></h6>
                 {% endif %}
-</h6>
+    </h6>
+    <h4>{{room.name}} </h4>
+    
+    <p> {{ room.description}} </p>
+    <hr>
+    <div class="comment-wrap">
+    {% if room_messages%}
+    <h3> Conversations: </h3>
+    {% else %}
+    <h5> no conversations yet! </h5>
+    {% endif %}
+    {% for rms in room_messages %}
+        <div>
+        <small>@{{rms.user}} - {{rms.created|timesince}} ago</small>
+        <p> {{rms.body}}</p>
+        <br>
+        </div>
+    {% endfor %}
+    {% if request.user.is_authenticated %}
+    <div clss="comment-form">
+        <form method='POST' action="">
+            {% csrf_token %}
+            <input placeholder="whats on your mind?..." type="text" name="body" />
+        </form>
+    </div>
+    {% else %}
+        <small> <a href="{% url 'loginreg' %}"> login </a> to comment! </small>
+    {% endif %}
+
+    </div>
+    
+</h3>
+
+
 {% endblock %}
