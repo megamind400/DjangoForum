@@ -35,15 +35,20 @@ def home(request):
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all().order_by('-created')
-
+    room_member = room.participants.all()
     if request.method == 'POST':
         message = Message.objects.create(
                 user= request.user,
                 room= room,
                 body= request.POST.get('body')
         )
-        return redirect('room', pk=room.id)
-    context = {'room': room, 'room_messages': room_messages}
+
+        
+        if request.user not in room.participants.all():
+            print("already added participant is getting adde again")
+            room.participants.add(request.user)
+        return redirect('room', pk=room.id)   
+    context = {'room': room, 'room_messages': room_messages, 'room_members': room_member}
     return render(request, 'base/room.html',context )    
 
 @login_required(login_url='loginreg') #if the user is not logged in redirect to 'loginreg'
@@ -86,6 +91,18 @@ def deleteRoom(request, pk):
         room.delete()
         return redirect('homepage')
     return render(request, 'base/delete.html',{'obj':room})
+
+
+@login_required(login_url='loginreg') #if the user is not logged in, redirect to 'loginreg
+def deleteMessage(request, pk):
+
+    message= Message.objects.get(id=pk)
+    if request.user != message.user:
+        messages.error(request,"you dont have the required permissions to delete this message!!")
+        return redirect('homepage')
+    elif request.user == message.user: #delete the message, no questions asked if the user is authenticated
+        message.delete()
+        return redirect('homepage')   
 
 @login_required(login_url='loginreg') #if the user is not logged in, redirect to 'loginreg'
 def logoutuser(request):

@@ -2,10 +2,16 @@
 <!--  -->
 {% block content %}
 
-<head>
-    <title> roombud </title>
+<style>
+    .wholeroomcontainter{
+        display: grid;
+        grid-template-columns: 8fr 2fr;
+    }
+</style>
 
-</head>
+<div class="wholeroomcontainter">
+
+<div>
 <h3>
     <h6>
                 {% if request.user == room.host %}
@@ -13,24 +19,16 @@
                 <a href="{% url 'delete-room' room.id %}"> Delete </a></h6>
                 {% endif %}
     </h6>
-    <h4>{{room.name}} </h4>
     
+
+    <p><b>{{room.name}}</b> 
+    <small> @{{room.host}} </small>
+    </p>
     <p> {{ room.description}} </p>
     <hr>
     <div class="comment-wrap">
-    {% if room_messages%}
-    <h3> Conversations: </h3>
-    {% else %}
-    <h5> no conversations yet! </h5>
-    {% endif %}
-    {% for rms in room_messages %}
-        <div>
-        <small>@{{rms.user}} - {{rms.created|timesince}} ago</small>
-        <p> {{rms.body}}</p>
-        <br>
-        </div>
-    {% endfor %}
-    {% if request.user.is_authenticated %}
+
+        {% if request.user.is_authenticated %}
     <div clss="comment-form">
         <form method='POST' action="">
             {% csrf_token %}
@@ -42,8 +40,37 @@
     {% endif %}
 
     </div>
+
+
+    {% if room_messages%}
+    <h3> Conversations: </h3>
+    {% else %}
+    <h5> no conversations yet! </h5>
+    {% endif %}
+    {% for rms in room_messages %}
+        <div>
+        <small>@{{rms.user}} - {{rms.created|timesince}} ago</small>
+        {%if request.user == rms.user %}
+            <small><a href="{% url 'delete-message' rms.id %}">Delete</a></small>
+        {% endif %}
+        <br> {{rms.body}}
+        <br><br>
+        </div>
+    {% endfor %}
+
     
 </h3>
+</div>
+    <div>
+        <center>
+        <h4> Participants </h4>
+        </center>
+        {% for member in room_members %}
+        <small>@{{ member }}</small><br>
+        {% endfor %}
+        
+    </div>
 
+</div>
 
 {% endblock %}
