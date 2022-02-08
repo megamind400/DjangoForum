@@ -26,22 +26,10 @@
             {% elif room_count == 0 %} no room has been found with the given information!
             {% endif %}
             </p>
-            {% for room in rooms %}
+            
 
-            <div>
-
-                <h5>
-                    <span>@{{room.host}} </span>:
-                    <a href='{% url "room" room.id%}'> {{room.name}} </a>
-                    <small> {{room.topic.name}}</small></h5>
-                {% if request.user == room.host %}
-                <h6><a href="{% url 'update-room' room.id %}"> Edit </a>
-                <a href="{% url 'delete-room' room.id %}"> Delete </a></h6>
-                {% endif %}
-                    <hr>
-                
-            </div>
-            {% endfor %}
+            {% include 'base/main_feed.html'%}
+            
         </div>
 
     </div>

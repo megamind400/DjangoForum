@@ -59,6 +59,14 @@ def room(request, pk):
     return render(request, 'base/room.html',context )    
 
 
+def userprofile(request, pk):
+    current_user = User.objects.get(id=pk)
+    rooms = current_user.room_set.all()
+    topic = Topic.objects.all()
+    activity_messages = current_user.message_set.all()
+    context = {'user':current_user, 'rooms': rooms, 'topic':topic, 'activity_messages': activity_messages,}
+    return render(request, 'base/profile.html', context)
+
 
 @login_required(login_url='loginreg') #if the user is not logged in redirect to 'loginreg'
 def CreateRoom(request):

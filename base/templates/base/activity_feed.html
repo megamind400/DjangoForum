@@ -1,6 +1,6 @@
 <h3> Recnt activities </h3><hr>
 {% for recents in activity_messages %}
-    <small>@{{recents.user}} - {{recents.created|timesince}} ago</small><br>
+    <small><a href="{% url 'user-profile' recents.user.id %}">@{{recents.user}}</a> - {{recents.created|timesince}} ago</small><br>
     <small> replied to <i>"<a href="{% url 'room' recents.room.id %}">{{recents.room}}"</a></i> </small><br>
     <small> {{recents}}</small>
     <hr>
