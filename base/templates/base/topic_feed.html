@@ -1,0 +1,16 @@
+<h3>
+    Browse Topics
+    </h3>
+    <hr>
+    <h5>
+    <a href="{% url 'homepage' %}">All</a>
+    </h5>
+    <h5>
+    {% for eachtopic in topic %}
+       
+            
+            <a href="{% url 'homepage' %}?search={{eachtopic.name}}"> {{ eachtopic }} </a><br>
+            
+        
+    {% endfor %}
+    </h5>

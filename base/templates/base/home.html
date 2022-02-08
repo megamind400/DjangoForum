@@ -5,33 +5,17 @@
 <style>
     .home-container{
         display: grid;
-        grid-template-columns: 2fr 12fr;
+        grid-template-columns: 2fr 12fr 3fr;
     }
 
 </style>
 
 <div class="home-container">
 
-    <div>
-    <h3>
-    Browse Topics
-    </h3>
-    <hr>
-    <h5>
-    <a href="{% url 'homepage' %}">All</a>
-    </h5>
-    
-    {% for eachtopic in topic %}
-       
-            <h5>
-            <a href="{% url 'homepage' %}?search={{eachtopic.name}}"> {{ eachtopic }} </a>
-            </h5>
-        
-    {% endfor %}
-  
-
+    <div> <!-- topics -->
+    {% include 'base/topic_feed.html' %}
     </div>
-    <div>
+    <div> <!-- center column -->
         <br>
         <a href="{% url 'create-room'%}"> submit something </a>
         <hr>
@@ -60,6 +44,9 @@
             {% endfor %}
         </div>
 
+    </div>
+    <div> <!-- recent activities -->
+        {% include 'base/activity_feed.html'%}
     </div>
 </div>
 {% endblock %}

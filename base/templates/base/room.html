@@ -22,7 +22,9 @@
     
 
     <p><b>{{room.name}}</b> 
-    <small> @{{room.host}} </small>
+    <small> @{{room.host}} | {{room.created|timesince}} ago  </small>
+    {% if room.created|timesince != room.updated|timesince %} <small> Updated </small> {% endif %}
+ 
     </p>
     <p> {{ room.description}} </p>
     <hr>
@@ -42,7 +44,7 @@
     </div>
 
 
-    {% if room_messages%}
+    {% if room_messages %}
     <h3> Conversations: </h3>
     {% else %}
     <h5> no conversations yet! </h5>
@@ -50,9 +52,11 @@
     {% for rms in room_messages %}
         <div>
         <small>@{{rms.user}} - {{rms.created|timesince}} ago</small>
-        {%if request.user == rms.user %}
+
+        {%if request.user == rms.user %} <!-- deleting a message -->
             <small><a href="{% url 'delete-message' rms.id %}">Delete</a></small>
         {% endif %}
+
         <br> {{rms.body}}
         <br><br>
         </div>
