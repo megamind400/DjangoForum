@@ -16,4 +16,6 @@ to turn the debug mode off:
  vim mysite/settings.py
  
  change DEBUG to False
+ 
+
  change allowed hosts accordingly
