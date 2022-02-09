@@ -10,4 +10,10 @@ to run the app, first cd to the app directory then run:
 
 python3 manage.py runserver
 
+---
+to turn the debug mode of:
+
+ vim mysite/settings.py
  
+ change DEBUG to False
+ change allowed hosts accordingly
