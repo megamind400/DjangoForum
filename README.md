@@ -11,7 +11,7 @@ to run the app, first cd to the app directory then run:
 python3 manage.py runserver
 
 ---
-to turn the debug mode of:
+to turn the debug mode off:
 
  vim mysite/settings.py
  
