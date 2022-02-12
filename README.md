@@ -19,3 +19,7 @@ change DEBUG to False
  
 
 change allowed hosts accordingly
+<<<<<<< HEAD
+=======
+
+>>>>>>> UPD restrictions on room_form, and some little tweaks
