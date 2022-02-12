@@ -69,28 +69,38 @@ def userprofile(request, pk):
     return render(request, 'base/profile.html', context)
 
 
-@login_required(login_url='loginreg') #if the user is not logged in redirect to 'loginreg'
+@login_required(login_url='loginreg') #if the user is not logged-in redirect to 'loginreg'
 def CreateRoom(request):
     form = RoomForm()
-    
+    topics = Topic.objects.all() #to show the already added topics to the user in frontend
+
+
     if request.method == 'POST':
-
-        form = RoomForm(request.POST)
-        if form.is_valid():
-            roomcreate = form.save(commit=False)
-            roomcreate.host = request.user
-            roomcreate.save()
-            roomcreate.participants.add(request.user)
-
-            return redirect('room', pk=roomcreate.id) 
-    context = {'form': form}
+        topicname = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topicname)
+        newroom = Room.objects.create(
+            host=request.user,
+            topic=topic,
+            name=request.POST.get('name'),
+            description= request.POST.get('description')
+        )
+        #form = RoomForm(request.POST)
+        #if form.is_valid():
+        #    roomcreate = form.save(commit=False)
+        #    roomcreate.host = request.user
+        #    roomcreate.save()
+        #    roomcreate.participants.add(request.user)
+        newroom.participants.add(request.user)
+        return redirect('room', pk=newroom.id) 
+        #return redirect('homepage') 
+    context = {'form': form, 'topics': topics}
     return render(request, 'base/room_form.html', context)
 
 @login_required(login_url='loginreg') #if the user is not logged in redirect to 'loginreg'
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room) #instance prefills the text boxes with previous information
-
+    topics = Topic.objects.all()
     if request.user != room.host: #chekcing if user is authenticated to edit
         messages.error(request, 'you dont have the required permissions to edit this room')
         return redirect('homepage')
@@ -100,7 +110,7 @@ def updateRoom(request, pk):
         if form.is_valid():
             form.save()
             return redirect('homepage')
-    context = {'form': form}
+    context = {'form': form, 'topics': topics}
     return render(request, 'base/room_form.html', context)
 
 @login_required(login_url='loginreg') #if the user is not logged in redirect to 'loginreg'
