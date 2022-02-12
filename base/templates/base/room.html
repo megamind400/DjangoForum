@@ -65,12 +65,12 @@
     
 </h3>
 </div>
-    <div>
+    <div> <!-- Participants -->
         <center>
         <h4> Participants </h4>
         </center>
         {% for member in room_members %}
-        <small>@{{ member }}</small><br>
+        <small>@<a href="{% url 'user-profile'  member.id%}">{{ member }}</a></small><br>
         {% endfor %}
         
     </div>

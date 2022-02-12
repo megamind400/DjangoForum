@@ -2,8 +2,8 @@
 
 
 {% block content%}
-<p>{{user.username}}</p>
-
+<center><h3>@{{user.username}}</h3></center>
+<hr>
 <style>
     .page-container{
         display: grid;
@@ -20,6 +20,7 @@
     </div>
         
     <div> <!-- main -->
+        <p> all the posts made by <b>{{user.username}}</b>: </p>
         {% include 'base/main_feed.html' %}
     </div>
     

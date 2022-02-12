@@ -44,6 +44,7 @@ def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all()
     room_member = room.participants.all()
+    
     if request.method == 'POST':
         message = Message.objects.create(
                 user= request.user,
@@ -76,10 +77,13 @@ def CreateRoom(request):
 
         form = RoomForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('homepage')
+            roomcreate = form.save(commit=False)
+            roomcreate.host = request.user
+            roomcreate.save()
+            roomcreate.participants.add(request.user)
+
+            return redirect('room', pk=roomcreate.id) 
     context = {'form': form}
-    print("im here")
     return render(request, 'base/room_form.html', context)
 
 @login_required(login_url='loginreg') #if the user is not logged in redirect to 'loginreg'
