@@ -2,8 +2,8 @@
                 {% for room in rooms %}
                 <h5>
                     <span><a href="{% url 'user-profile' room.host.id %}">@{{room.host}}</a></span>:
-                    <a href='{% url "room" room.id%}'> {{room.name}} </a>
-                    <small> {{room.topic.name}}</small></h5>
+                    <a href='{% url "room" room.id%}'> {{room.name}} </a>{% if room.created|timesince != room.updated|timesince %} <small> <i>Updated</i> </small> {% endif %}
+                    <small><a href="{% url 'homepage' %}?search={{room.topic.name}}">{{room.topic.name}}</a></small></h5>
                 {% if request.user == room.host %}
                 <h6><a href="{% url 'update-room' room.id %}"> Edit </a>
                 <a href="{% url 'delete-room' room.id %}"> Delete </a></h6>

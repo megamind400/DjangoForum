@@ -29,6 +29,7 @@ def home(request):
     
     topic = Topic.objects.all()
     roomcount = roomsvar.count()
+    allrooms = Room.objects.all()
     activity_messages = Message.objects.filter(
         Q(room__name__icontains=q) |
         Q(room__topic__name__icontains=q)
@@ -37,6 +38,7 @@ def home(request):
     
     context = {'rooms': roomsvar, 'topic': topic,
                 'room_count': roomcount, 'activity_messages': activity_messages,
+                'allrooms': allrooms,
                 }
     return render(request, 'base/home.html', context)   
 
@@ -64,8 +66,10 @@ def userprofile(request, pk):
     current_user = User.objects.get(id=pk)
     rooms = current_user.room_set.all()
     topic = Topic.objects.all()
+    allrooms = Room.objects.all()
     activity_messages = current_user.message_set.all()
-    context = {'user':current_user, 'rooms': rooms, 'topic':topic, 'activity_messages': activity_messages,}
+    context = {'user':current_user, 'rooms': rooms, 'topic':topic,
+     'activity_messages': activity_messages, 'allrooms': allrooms,}
     return render(request, 'base/profile.html', context)
 
 
@@ -77,14 +81,14 @@ def CreateRoom(request):
 
     if request.method == 'POST':
         topicname = request.POST.get('topic')
-        topic, created = Topic.objects.get_or_create(name=topicname)
-        newroom = Room.objects.create(
+        topic, created = Topic.objects.get_or_create(name=topicname) # if the recieved topic is in the database/
+        newroom = Room.objects.create(                               # /add it to topic & created = False, and viceversa
             host=request.user,
             topic=topic,
             name=request.POST.get('name'),
             description= request.POST.get('description')
         )
-        #form = RoomForm(request.POST)
+        #form = RoomForm(request.POST) #old method
         #if form.is_valid():
         #    roomcreate = form.save(commit=False)
         #    roomcreate.host = request.user
@@ -106,11 +110,14 @@ def updateRoom(request, pk):
         return redirect('homepage')
 
     if request.method == 'POST': #edit method
-        form = RoomForm(request.POST, instance=room) #instance updates the room instead of creating a new one
-        if form.is_valid():
-            form.save()
-            return redirect('homepage')
-    context = {'form': form, 'topics': topics}
+        topicname = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topicname)
+        room.topic = topic
+        room.name = request.POST.get('name')
+        room.description = request.POST.get('description') 
+        room.save()
+        return redirect('homepage')
+    context = {'form': form, 'topics': topics, 'room': room}
     return render(request, 'base/room_form.html', context)
 
 @login_required(login_url='loginreg') #if the user is not logged in redirect to 'loginreg'

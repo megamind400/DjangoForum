@@ -3,13 +3,14 @@
     </h3>
     <hr>
     <h5>
-    <a href="{% url 'homepage' %}">All</a>
+    <a href="{% url 'homepage' %}">All</a><small>({{allrooms.all.count}})</small>
     </h5>
     <h5>
     {% for eachtopic in topic %}
        
             
-            <a href="{% url 'homepage' %}?search={{eachtopic.name}}"> {{ eachtopic }} </a><br>
+            <a href="{% url 'homepage' %}?search={{eachtopic.name}}"> {{ eachtopic }} </a>
+            <small>( {{eachtopic.room_set.all.count}} )</small><br>
             
         
     {% endfor %}
